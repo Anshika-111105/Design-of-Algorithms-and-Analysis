@@ -1,33 +1,32 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <limits.h>
 using namespace std;
-int partition(vector<int>& arr, int low, int high) {
-    int pivot = arr[high];
-    int i = low;
-    for (int j = low; j < high; j++) {
-        if (arr[j] <= pivot) {
-            swap(arr[i], arr[j]);
-            i++;
+
+int kthSmallestUsingCountSort(vector<int>& arr, int K) {
+    // Find the maximum element to define the range
+    int maxElement = *max_element(arr.begin(), arr.end());
+
+    // Create and initialize the count array
+    vector<int> count(maxElement + 1, 0);
+
+    // Fill the count array with frequency of elements
+    for (int num : arr) {
+        count[num]++;
+    }
+
+    // Find the Kth smallest element
+    int countSum = 0;
+    for (int i = 0; i <= maxElement; i++) {
+        countSum += count[i];
+        if (countSum >= K) {
+            return i;
         }
     }
-    swap(arr[i], arr[high]);
-    return i;
+
+    return -1; // If K is out of bounds
 }
-int quickSelect(vector<int>& arr, int low, int high, int k) {
-    if (low <= high) {
-        int pivotIndex = partition(arr, low, high);
-        if (pivotIndex == k) {
-            return arr[pivotIndex];
-        } else if (pivotIndex > k) {
-            return quickSelect(arr, low, pivotIndex - 1, k);
-        } else {
-            return quickSelect(arr, pivotIndex + 1, high, k);
-        }
-    }
-    return INT_MIN; // If K is out of range
-}
+
 int main() {
     int T;
     cin >> T;
@@ -35,16 +34,16 @@ int main() {
         int n;
         cin >> n;
         vector<int> arr(n);
-        for (int i = 0; i < n; i++) {
-            cin >> arr[i];
-        }
+        
+        for (int i = 0; i < n; i++) cin >> arr[i];
+
         int K;
         cin >> K;    
+
         if (K > 0 && K <= n) {
-            int kthElement = quickSelect(arr, 0, n - 1, K - 1);
-            cout << kthElement << "\n";
+            cout << kthSmallestUsingCountSort(arr, K) << "\n";
         } else {
-            cout << "not present\n";
+            cout << "K is out of bounds\n";
         }
     }
     return 0;
