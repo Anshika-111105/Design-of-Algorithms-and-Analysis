@@ -1,29 +1,37 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <limits.h>
 using namespace std;
-
-int kthSmallestUsingCountSort(vector<int>& arr, int K) {
-    int maxElement = *max_element(arr.begin(), arr.end());
-    vector<int> count(maxElement + 1, 0);
-    for (int num : arr) {
-        count[num]++;
-    }
-    int countSum = 0;
-    for (int i = 0; i <= maxElement; i++) {
-        countSum += count[i];
-        if (countSum >= K) {
-            return i;
+int partition(vector<int>& arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low;
+    for (int j = low; j < high; j++) {
+        if (arr[j] <= pivot) {
+            swap(arr[i], arr[j]);
+            i++;
         }
     }
-
-    return -1; // If K is out of bounds
+    swap(arr[i], arr[high]);
+    return i;
 }
-
+int quickSelect(vector<int>& arr, int low, int high, int k) {
+    if (low <= high) {
+        int pivotIndex = partition(arr, low, high);
+        if (pivotIndex == k) {
+            return arr[pivotIndex];
+        } else if (pivotIndex > k) {
+            return quickSelect(arr, low, pivotIndex - 1, k);
+        } else {
+            return quickSelect(arr, pivotIndex + 1, high, k);
+        }
+    }
+    return INT_MIN; // If K is out of range
+}
 int main() {
-    int Testcases;
-    cin >> Testcases;
-    while (Testcases--) {
+    int T;
+    cin >> T;
+    while (T--) {
         int n;
         cin >> n;
         vector<int> arr(n);
@@ -33,9 +41,10 @@ int main() {
         int K;
         cin >> K;    
         if (K > 0 && K <= n) {
-            cout<<kthSmallestUsingCountSort(arr, K)<<endl;
+            int kthElement = quickSelect(arr, 0, n - 1, K - 1);
+            cout << kthElement << "\n";
         } else {
-            cout<<"Not present"<<endl;;
+            cout << "not present\n";
         }
     }
     return 0;
