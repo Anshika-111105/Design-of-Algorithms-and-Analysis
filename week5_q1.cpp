@@ -1,51 +1,44 @@
-<<<<<<< HEAD
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <string>
 using namespace std;
-void maxFrequency(char arr[]){
-    int n=arr.length();
-    int freq[26]={0};
-    for(int i=0;i<n;i++){
-
+void findMaxOccurrence(int n, vector<char> &arr) {
+    vector<int> count(26, 0); // Count array for 26 lowercase alphabets
+    // Count occurrences of each character
+    for (char ch : arr) {
+        count[ch - 'a']++;
     }
-    char ans;
-    char ch='a';
-    int max=INT16_MIN;
-    for(int i=0;i<26;i++){
-        if(freq[i]>max){
-            max=freq[i];
-            ans=ch;
+    int maxFreq = 0;
+    char maxChar = ' '; 
+    bool duplicates = false;
+    for (int i = 0; i < 26; i++) {
+        if (count[i] > maxFreq) {
+            maxFreq = count[i];
+            maxChar = 'a' + i;
         }
-        ch++;
     }
-
-}
-
-=======
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <string>
-using namespace std;
-void maxFrequency(char arr[]){
-    int n=arr.length();
-    int freq[26]={0};
-    for(int i=0;i<n;i++){
-
-    }
-    char ans;
-    char ch='a';
-    int max=INT16_MIN;
-    for(int i=0;i<26;i++){
-        if(freq[i]>max){
-            max=freq[i];
-            ans=ch;
+    for (int i = 0; i < 26; i++) {
+        if (count[i] > 1) {
+            duplicates = true;
+            break;
         }
-        ch++;
     }
-
+    if (!duplicates) {
+        cout << "No Duplicates Present" << endl;
+    } else {
+        cout << maxChar << " " << maxFreq << endl;
+    }
 }
-
->>>>>>> ed9d193c0b14ecaa109b1b5489c2c8b5b6d9ea0f
+int main() {
+    int T;
+    cin >> T; 
+    while (T--) {
+        int n;
+        cin >> n; 
+        vector<char> arr(n);
+        for (int i = 0; i < n; i++) {
+            cin >> arr[i];
+        }
+        findMaxOccurrence(n, arr);
+    }
+    return 0;
+}
