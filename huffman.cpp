@@ -111,7 +111,7 @@ void buildHuffmanTree(string text) {
     cout << "\n"; 
 }
 int main() { 
-    string text = "Huffman coding is a data compression algorithm."; 
+    string text = "Anshika Saklani."; 
     buildHuffmanTree(text); 
     return 0; 
 }
